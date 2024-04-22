@@ -5,14 +5,70 @@ from unify import Unify
 
 # load_dotenv()
 
-api_key = st.sidebar.text_input("Unify AI Key")
+api_key = st.sidebar.text_input("Unify AI Key",type="password")
+
+model_name = st.sidebar.selectbox("Select Model",
+                                  options=['mixtral-8x7b-instruct-v0.1',
+ 'llama-2-70b-chat',
+ 'llama-2-13b-chat',
+ 'mistral-7b-instruct-v0.2',
+ 'llama-2-7b-chat',
+ 'codellama-34b-instruct',
+ 'gemma-7b-it',
+ 'mistral-7b-instruct-v0.1',
+ 'mixtral-8x22b-instruct-v0.1',
+ 'codellama-13b-instruct',
+ 'codellama-7b-instruct',
+ 'yi-34b-chat',
+ 'llama-3-8b-chat',
+ 'llama-3-70b-chat',
+ 'pplx-7b-chat',
+ 'mistral-medium',
+ 'gpt-4',
+ 'pplx-70b-chat',
+ 'gpt-3.5-turbo',
+ 'deepseek-coder-33b-instruct',
+ 'gemma-2b-it',
+ 'gpt-4-turbo',
+ 'mistral-small',
+ 'mistral-large',
+ 'mixtral-8x7b-instruct-v0.1',
+ 'llama-2-70b-chat',
+ 'llama-2-13b-chat',
+ 'mistral-7b-instruct-v0.2',
+ 'llama-2-7b-chat',
+ 'codellama-34b-instruct',
+ 'gemma-7b-it',
+ 'mistral-7b-instruct-v0.1',
+ 'mixtral-8x22b-instruct-v0.1',
+ 'codellama-13b-instruct',
+ 'codellama-7b-instruct',
+ 'yi-34b-chat',
+ 'llama-3-8b-chat',
+ 'llama-3-70b-chat',
+ 'pplx-7b-chat',
+ 'mistral-medium',
+ 'gpt-4',
+ 'pplx-70b-chat',
+ 'gpt-3.5-turbo',
+ 'deepseek-coder-33b-instruct',
+ 'gemma-2b-it',
+ 'gpt-4-turbo',
+ 'mistral-small',
+ 'mistral-large'],index=44)
+
+provider_name = st.sidebar.selectbox("Select a Provider",
+                                options=["anyscale","replicate","together-ai","deepinfra","fireworks-ai","mistral-ai","octoai"],index=0)
+
 
 st.title("Chat with Data")
+
 
 unify = Unify(
     # This is the default and optional to include.
     api_key=api_key,
-    endpoint="llama-2-13b-chat@anyscale"
+    model=model_name,
+    provider=provider_name
 )
 
 # Initialize chat history

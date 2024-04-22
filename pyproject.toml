@@ -9,6 +9,12 @@ readme = "README.md"
 python = ">=3.9,<3.9.7 || >3.9.7,<4.0"
 streamlit = "^1.33.0"
 llama-index = "^0.10.30"
+llama-index-core = "^0.10.30"
+llama-index-readers-file = "^0.1.19"
+llama-index-llms-ollama = "^0.1.2"
+llama-index-embeddings-huggingface = "^0.2.0"
+beautifulsoup4 = "^4.12.3"
+html5lib = "^1.1"
 
 
 [build-system]

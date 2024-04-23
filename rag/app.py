@@ -78,11 +78,12 @@ if "messages" not in st.session_state:
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
+if len(st.session_state.messages) == 0:
+    with st.chat_message("assistant"):
+        initial = "Please enter Unify API key and select a model and provider before entering a question"
+        st.markdown(initial)
+        st.session_state.messages.append({"role": "assistant", "content": initial})
 
-with st.chat_message("assistant"):
-    initial = "Please enter Unify API key and select a model and provider before entering a question"
-    st.markdown(initial)
-st.session_state.messages.append({"role": "assistant", "content": initial})
 # Accept user input
 if prompt := st.chat_input():
     # Add user message to chat history
@@ -95,7 +96,7 @@ if prompt := st.chat_input():
         stream = unify.generate(
             messages=[
                 {"role": m["role"], "content": m["content"]}
-                for m in st.session_state.messages
+                for m in st.session_state.messages[1:]
             ],
             stream=True,
         )

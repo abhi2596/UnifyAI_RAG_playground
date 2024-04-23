@@ -58,11 +58,10 @@ model_name = st.sidebar.selectbox("Select Model",
  'mistral-large'],index=44)
 
 provider_name = st.sidebar.selectbox("Select a Provider",
-                                options=["anyscale","replicate","together-ai","deepinfra","fireworks-ai","mistral-ai","octoai"],index=0)
+                                options=["anyscale","replicate","together-ai","deepinfra","fireworks-ai","mistral-ai","octoai"],index=2)
 
 
 st.title("Chat with Data")
-
 
 unify = Unify(
     # This is the default and optional to include.
@@ -80,8 +79,12 @@ for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
 
+with st.chat_message("assistant"):
+    initial = "Please enter Unify API key and select a model and provider before entering a question"
+    st.markdown(initial)
+st.session_state.messages.append({"role": "assistant", "content": initial})
 # Accept user input
-if prompt := st.chat_input("What do you want to know about your data"):
+if prompt := st.chat_input():
     # Add user message to chat history
     st.session_state.messages.append({"role": "user", "content": prompt})
     # Display user message in chat message container

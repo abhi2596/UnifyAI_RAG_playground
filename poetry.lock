@@ -3341,6 +3341,21 @@ files = [
 ]
 
 [[package]]
+name = "unifyai"
+version = "0.8.1"
+description = "A Python package for interacting with the Unify API"
+optional = false
+python-versions = "<4.0,>=3.9"
+files = [
+    {file = "unifyai-0.8.1-py3-none-any.whl", hash = "sha256:cb61f64c156a377bc3e27eade99fbe490804d65b714b636de8de1c37fca0d090"},
+    {file = "unifyai-0.8.1.tar.gz", hash = "sha256:c4b142432703121fd18f55b4d39556d3ee56ed569ee2e16dfa0c35da05ef1643"},
+]
+
+[package.dependencies]
+openai = ">=1.12.0,<2.0.0"
+requests = ">=2.31.0,<3.0.0"
+
+[[package]]
 name = "urllib3"
 version = "2.2.1"
 description = "HTTP library with thread-safe connection pooling, file post, and more."
@@ -3594,4 +3609,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.9,<3.9.7 || >3.9.7,<4.0"
-content-hash = "51ed217afd75686e644037dfd5e59e6da236b29b919b00ef2d5a2db5b98b9c95"
+content-hash = "0949c328796a621eff9d39038e8e5060bbdf41443828bf335059e4dfa910ceb3"

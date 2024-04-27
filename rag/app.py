@@ -34,9 +34,9 @@ if uploaded_file is not None:
     # build index
     index = VectorStoreIndex.from_documents(documents)
 
-    Settings.llm = Unify(model="gemma-7b-it@anyscale",api_key=api_key)
+    Settings.llm = Unify(model=f"{model_name}@{provider_name}",api_key=api_key)
 
-    chat_engine = index.as_chat_engine(chat_mode="condense_plus_context")
+    chat_engine = index.as_chat_engine(chat_mode="react",llm=Settings.llm,verbose=True)
 
 # Initialize chat history
 if "messages" not in st.session_state:
@@ -62,6 +62,6 @@ if prompt := st.chat_input():
         st.markdown(prompt)
     # Display assistant response in chat message container
     with st.chat_message("assistant"):
-        streaming_response = chat_engine.stream_chat(prompt)
-        response = st.write_stream(streaming_response.response_gen)
+        response = chat_engine.chat(prompt)
+        response = st.write(response)
         st.session_state.messages.append({"role": "assistant", "content": response})

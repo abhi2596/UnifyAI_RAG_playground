@@ -36,7 +36,7 @@ if uploaded_file is not None:
 
     Settings.llm = Unify(model=f"{model_name}@{provider_name}",api_key=api_key)
 
-    chat_engine = index.as_chat_engine(chat_mode="react",llm=Settings.llm,verbose=True)
+    chat_engine = index.as_chat_engine(chat_mode="condense_question",llm=Settings.llm,verbose=True)
 
 # Initialize chat history
 if "messages" not in st.session_state:
@@ -63,5 +63,5 @@ if prompt := st.chat_input():
     # Display assistant response in chat message container
     with st.chat_message("assistant"):
         response = chat_engine.chat(prompt)
-        response = st.write(response)
+        response = st.write(response.response)
         st.session_state.messages.append({"role": "assistant", "content": response})

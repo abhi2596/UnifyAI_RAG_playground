@@ -36,7 +36,7 @@ if uploaded_file is not None:
 
     Settings.llm = Unify(model="gemma-7b-it@anyscale",api_key=api_key)
 
-    chat_engine = index.as_chat_engine(chat_mode="context")
+    chat_engine = index.as_chat_engine(chat_mode="condense_plus_context")
 
 # Initialize chat history
 if "messages" not in st.session_state:

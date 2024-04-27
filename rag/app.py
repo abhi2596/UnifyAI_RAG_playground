@@ -36,7 +36,7 @@ if uploaded_file is not None:
 
     Settings.llm = Unify(model="gemma-7b-it@anyscale",api_key=api_key)
 
-    query_engine = index.as_query_engine()
+    chat_engine = index.as_chat_engine()
 
 # Initialize chat history
 if "messages" not in st.session_state:
@@ -62,6 +62,6 @@ if prompt := st.chat_input():
         st.markdown(prompt)
     # Display assistant response in chat message container
     with st.chat_message("assistant"):
-        response = query_engine.query("What is OpenELM?")
-        st.markdown(response)
+        streaming_response = chat_engine.stream_chat(prompt)
+        response = st.write_stream(streaming_response.response_gen)
         st.session_state.messages.append({"role": "assistant", "content": response})

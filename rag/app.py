@@ -51,7 +51,7 @@ for message in st.session_state.messages:
 
 if len(st.session_state.messages) == 0:
     with st.chat_message("assistant"):
-        initial = " Follow this steps before asking questions about your data \n 1. Enter Unify API key \n 2. Select a Model and Provider using the sidebar \n 3. Upload a PDF file which is not encrypted"
+        initial = " Follow this steps before asking questions about your data \n 1. Enter Unify API key \n 2. Select a Model and Provider using the sidebar \n 3. Upload a PDF file which is not encrypted \n 4. Any changes to sidebar will reset chat"
         st.markdown(initial)
         st.session_state.messages.append({"role": "assistant", "content": initial})
 

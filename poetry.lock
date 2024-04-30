@@ -3379,13 +3379,13 @@ files = [
 
 [[package]]
 name = "unifyai"
-version = "0.8.1"
+version = "0.8.2"
 description = "A Python package for interacting with the Unify API"
 optional = false
 python-versions = "<4.0,>=3.9"
 files = [
-    {file = "unifyai-0.8.1-py3-none-any.whl", hash = "sha256:cb61f64c156a377bc3e27eade99fbe490804d65b714b636de8de1c37fca0d090"},
-    {file = "unifyai-0.8.1.tar.gz", hash = "sha256:c4b142432703121fd18f55b4d39556d3ee56ed569ee2e16dfa0c35da05ef1643"},
+    {file = "unifyai-0.8.2-py3-none-any.whl", hash = "sha256:42814a3d3bd2e86aaa2d9a1c34db43f153d8bdfbbcd26a4e88a9b7fbeb0326c4"},
+    {file = "unifyai-0.8.2.tar.gz", hash = "sha256:48fb06dbc40c00388dc213b45df6686ebfe0adaf46187d74923b5f0628a7ae92"},
 ]
 
 [package.dependencies]
@@ -3646,4 +3646,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.9,<3.9.7 || >3.9.7,<4.0"
-content-hash = "5233712401849e4a3c516d50a3d032b3083b9f7d78db443d3defeb3a509ab9a1"
+content-hash = "18be304e504283d8937db7ba5bf7f8dc8bf8a6f6b1ff14edbbbe4f2dfec79e1b"

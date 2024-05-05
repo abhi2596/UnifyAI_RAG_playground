@@ -1,11 +1,10 @@
 import streamlit as st 
-from unify import Unify
 from llama_index.core import VectorStoreIndex, Settings,Document
 from llama_index.core.embeddings import resolve_embed_model
+from llama_index.embeddings.instructor import InstructorEmbedding
 # from dotenv import load_dotenv
 from unify_llm import Unify
 from PyPDF2 import PdfReader
-from llama_index.core.node_parser import SentenceSplitter
 import unify
 
 # load_dotenv()
@@ -17,28 +16,51 @@ st.title("Chat with Data")
 
 api_key = st.sidebar.text_input("Unify AI Key",type="password")
 
-model_name = st.sidebar.selectbox("Select Model",options=unify.list_models(),index=1,on_change=reset)
+@st.cache_data(experimental_allow_widgets=True)
+def provider(model_name):
+    provider_name = st.selectbox("Select a Provider",options=unify.list_providers(model_name))
+    return provider_name
 
-provider_name = st.sidebar.selectbox("Select a Provider",options=unify.list_providers(model_name),on_change=reset)
+@st.experimental_fragment
+def mp_fragment():
+    model_name = st.selectbox("Select Model",options=unify.list_models(),index=1)
+    provider_name = provider(model_name)
+    return model_name,provider_name
+
+@st.cache_resource 
+def load_llm(model_name,provider_name):
+    Settings.llm = Unify(model=f"{model_name}@{provider_name}",api_key=api_key)
+    return Settings.llm
+
+# @st.experimental_fragment()
+def clear_fragment():
+    st.button("Clear Chat History",on_click=reset)
+
+with st.sidebar:
+    model_name,provider_name = mp_fragment()
 
 uploaded_file = st.sidebar.file_uploader("Upload a PDF file", accept_multiple_files=False,on_change=reset)
 
-clear = st.sidebar.button("Clear Chat",on_click=reset)
+with st.sidebar:
+    clear_fragment()
 
 if uploaded_file is not None:
-    reader = PdfReader(uploaded_file)
-    text_list = []
-    for page in reader.pages:
-        text_list.append(page.extract_text())
-    documents = [Document(text=t) for t in text_list]
+    @st.cache_resource
+    def vector_store(uploaded_file):
+        reader = PdfReader(uploaded_file)
+        text_list = []
+        for page in reader.pages:
+            text_list.append(page.extract_text())
+        documents = [Document(text=t) for t in text_list]
 
-    Settings.embed_model = resolve_embed_model(embed_model="local:BAAI/bge-small-en-v1.5")
+        Settings.embed_model = resolve_embed_model(embed_model="local:BAAI/bge-small-en-v1.5")
 
-    index = VectorStoreIndex.from_documents(documents)
+        index = VectorStoreIndex.from_documents(documents)
 
-    Settings.llm = Unify(model=f"{model_name}@{provider_name}",api_key=api_key)
-
-    chat_engine = index.as_chat_engine(chat_mode="condense_plus_context",llm=Settings.llm,verbose=False)
+        return index 
+    
+    index = vector_store(uploaded_file)
+    chat_engine = index.as_chat_engine(chat_mode="condense_plus_context",llm=load_llm(model_name,provider_name),verbose=False)
 
 # Initialize chat history
 if "messages" not in st.session_state:

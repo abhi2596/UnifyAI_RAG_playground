@@ -18,6 +18,10 @@ html5lib = "^1.1"
 unifyai = "^0.8.2"
 pypdf2 = "^3.0.1"
 llama-index-llms-openai-like = "^0.1.3"
+llama-index-embeddings-instructor = "^0.1.3"
+fitz = "^0.0.1.dev2"
+pymupdf = "^1.24.2"
+sentence-transformers = "^2.2.2"
 
 
 [build-system]

@@ -86,7 +86,6 @@ if prompt := st.chat_input():
             st.warning("Please Enter a Unify API key and upload a file")
         else:
             st.warning("Please Enter a Unify API key")
-        
     else: 
         st.session_state.messages.append({"role": "user", "content": prompt})
         # Display user message in chat message container

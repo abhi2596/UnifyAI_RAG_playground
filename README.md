@@ -54,3 +54,17 @@ poetry add <packagename>
 ```
 </li>
 </ul>
+
+Once setup is done 
+
+activate venv and move rag folder 
+ 
+```
+cd rag
+```
+
+run 
+
+```
+streamlit run app.py 
+```

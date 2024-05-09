@@ -1,14 +1,17 @@
 import streamlit as st 
 from llama_index.core import VectorStoreIndex, Settings,Document
 from llama_index.core.embeddings import resolve_embed_model
-# from dotenv import load_dotenv
+from llama_index.core.postprocessor import SentenceTransformerRerank
 from unify_llm import Unify
 from PyPDF2 import PdfReader
 import unify
+from llama_index.core.node_parser import SentenceSplitter
 
 # load_dotenv()
 
 # add dynamic routing
+# look into caching again and also mp_fragment and load_llm and clear chat history 
+# app should be fast
 
 def reset():
     st.session_state.messages = []
@@ -17,9 +20,13 @@ st.title("Chat with Data")
 
 api_key = st.sidebar.text_input("Unify AI Key",type="password")
 
-@st.cache_data(experimental_allow_widgets=True)
 def provider(model_name):
-    provider_name = st.selectbox("Select a Provider",options=unify.list_providers(model_name))
+    dynamic = st.toggle("Dynamic Routing")
+    if dynamic:
+        providers = ["lowest-input-cost","lowest-output-cost","lowest-itl","lowest-ttft","highest-tks-per-sec"]
+        provider_name = st.selectbox("Select a Provider",options=providers,index=1)
+    else:
+        provider_name = st.selectbox("Select a Provider",options=unify.list_providers(model_name))
     return provider_name
 
 @st.experimental_fragment
@@ -28,22 +35,23 @@ def mp_fragment():
     provider_name = provider(model_name)
     return model_name,provider_name
 
-@st.cache_resource 
-def load_llm(model_name,provider_name):
-    llm = Unify(model=f"{model_name}@{provider_name}",api_key=api_key)
-    return llm
+def load_models(model_name,provider_name):
+    Settings.llm = Unify(model=f"{model_name}@{provider_name}",api_key=api_key)
 
-# @st.experimental_fragment()
-def clear_fragment():
-    st.button("Clear Chat History",on_click=reset)
+@st.cache_resource
+def rerank_model():
+    rerank = SentenceTransformerRerank(
+        model="cross-encoder/ms-marco-MiniLM-L-2-v2", top_n=3
+    )
+    return rerank
 
 with st.sidebar:
     model_name,provider_name = mp_fragment()
+    uploaded_file = st.file_uploader("Upload a PDF file", accept_multiple_files=False,on_change=reset)
+    st.sidebar.button("Clear Chat History",on_click=reset)
 
-uploaded_file = st.sidebar.file_uploader("Upload a PDF file", accept_multiple_files=False,on_change=reset)
 
-with st.sidebar:
-    clear_fragment()
+load_models(model_name,provider_name)
 
 if uploaded_file is not None:
     @st.cache_resource
@@ -53,15 +61,14 @@ if uploaded_file is not None:
         for page in reader.pages:
             text_list.append(page.extract_text())
         documents = [Document(text=t) for t in text_list]
-
+        parser = SentenceSplitter(chunk_size = 128, chunk_overlap = 20)
+        nodes = parser.get_nodes_from_documents(documents)
         Settings.embed_model = resolve_embed_model(embed_model="local:BAAI/bge-small-en-v1.5")
-
-        index = VectorStoreIndex.from_documents(documents)
-
+        index = VectorStoreIndex(nodes)
         return index 
     
     index = vector_store(uploaded_file)
-    chat_engine = index.as_chat_engine(chat_mode="condense_plus_context",llm=load_llm(model_name,provider_name),verbose=True,similarity_top_k=2)
+    chat_engine = index.as_chat_engine(chat_mode="condense_plus_context",verbose=True,similarity_top_k=10,node_postprocessors=[rerank_model()])
 
 # Initialize chat history
 if "messages" not in st.session_state:
@@ -81,11 +88,12 @@ if len(st.session_state.messages) == 0:
 # Accept user input
 if prompt := st.chat_input():
     # Add user message to chat history
-    if api_key is None:
-        if uploaded_file is None:
-            st.warning("Please Enter a Unify API key and upload a file")
-        else:
-            st.warning("Please Enter a Unify API key")
+    if api_key == "" and uploaded_file is None:
+        st.warning("Please Enter a Unify API key and upload a file")
+    elif api_key is None:
+        st.warning("Please Enter a Unify API key")
+    elif uploaded_file is None:
+        st.warning("Upload a File")   
     else: 
         st.session_state.messages.append({"role": "user", "content": prompt})
         # Display user message in chat message container

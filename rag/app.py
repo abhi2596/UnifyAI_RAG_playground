@@ -61,10 +61,8 @@ if uploaded_file is not None:
         for page in reader.pages:
             text_list.append(page.extract_text())
         documents = [Document(text=t) for t in text_list]
-        parser = SentenceSplitter(chunk_size = 128, chunk_overlap = 20)
-        nodes = parser.get_nodes_from_documents(documents)
         Settings.embed_model = resolve_embed_model(embed_model="local:BAAI/bge-small-en-v1.5")
-        index = VectorStoreIndex(nodes)
+        index = VectorStoreIndex.from_documents(documents)
         return index 
     
     index = vector_store(uploaded_file)

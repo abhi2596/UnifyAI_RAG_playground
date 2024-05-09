@@ -18,8 +18,7 @@ The application was built using Streamlit and to optimize streamlit @st.experime
 ## Quick Demo
 [streamlit-app-2024-05-09-02-05-91.webm](https://github.com/abhi2596/UnifyAI_RAG_playground/assets/80634226/7bbdd4c4-447f-4a12-9942-d09f860802f6)
 
-## Repository and Deployment
-Github - https://github.com/abhi2596/UnifyAI_RAG_playground/tree/main
+## Deployment
 Streamlit App - https://unifyai-rag-playground.streamlit.app/
 
 Instructions to run locally:
@@ -48,9 +47,3 @@ poetry install
 cd rag
 streamlit run app.py
 ```
-
-## Contributors
-
-| Name | GitHub Profile |
-|------|----------------|
-| Abhijeet Chintakunta | [abhi2596](https://github.com/abhi2596) |

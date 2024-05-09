@@ -16,8 +16,7 @@ The application was built using Streamlit and to optimize streamlit @st.experime
 
 
 ## Quick Demo
-
-![Alt Text](https://github.com/abhi2596/UnifyAI_RAG_playground/tree/main/assets/streamlit-app-2024-05-09-02-05-91.webm)
+[streamlit-app-2024-05-09-02-05-91.webm](https://github.com/abhi2596/UnifyAI_RAG_playground/assets/80634226/7bbdd4c4-447f-4a12-9942-d09f860802f6)
 
 ## Repository and Deployment
 Github - https://github.com/abhi2596/UnifyAI_RAG_playground/tree/main

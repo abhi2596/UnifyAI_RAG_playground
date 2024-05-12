@@ -5,13 +5,13 @@ from llama_index.core.postprocessor import SentenceTransformerRerank
 from unify_llm import Unify
 from PyPDF2 import PdfReader
 import unify
-from llama_index.core.node_parser import SentenceSplitter
 
 # load_dotenv()
 
-# add dynamic routing
 # look into caching again and also mp_fragment and load_llm and clear chat history 
 # app should be fast
+# context mode seems to be the best 
+
 
 def reset():
     st.session_state.messages = []
@@ -66,7 +66,7 @@ if uploaded_file is not None:
         return index 
     
     index = vector_store(uploaded_file)
-    chat_engine = index.as_chat_engine(chat_mode="condense_plus_context",verbose=True,similarity_top_k=10,node_postprocessors=[rerank_model()])
+    chat_engine = index.as_chat_engine(chat_mode="context",verbose=True,similarity_top_k=10,node_postprocessors=[rerank_model()])
 
 # Initialize chat history
 if "messages" not in st.session_state:
